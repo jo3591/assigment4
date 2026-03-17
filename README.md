@@ -13,4 +13,7 @@ The GitHub Actions pipeline `.github/workflows/ml-pipeline.yml` automates the Co
 5. **Model Dry Test**: A quick verification (`python -c "import tensorflow; print('Model environment ready!')"`) actively ensures that the primary DL framework (TensorFlow) loaded correctly in the job container.
 6. **Artifacting**: Finally, `actions/upload-artifact@v4` successfully captures this `README.md` document and generates a traceable artifact named `project-doc`.
 
+<img width="1498" height="572" alt="image" src="https://github.com/user-attachments/assets/1da638a2-869a-4ed7-b30c-1f6c2f731f43" />
+<img width="1498" height="572" alt="image" src="https://github.com/user-attachments/assets/1da638a2-869a-4ed7-b30c-1f6c2f731f43" />
+<img width="1498" height="572" alt="image" src="https://github.com/user-attachments/assets/1da638a2-869a-4ed7-b30c-1f6c2f731f43" />
 
