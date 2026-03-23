@@ -27,7 +27,7 @@ jobs:
 
       - name: Train model
         env:
-          MOCK_ACCURACY: "0.5"
+          MOCK_ACCURACY: "0.88"
         run: python train.py --epochs 1 --batch_size 100
 
       - name: Verify model_info.txt
