@@ -21,10 +21,10 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt dvc
+        run: pip install -r requirements.txt
 
-      - name: Pull data
-        run: dvc pull || echo "DVC pull skipped (no remote configured)"
+      - name: Pull Data
+        run: echo "Data will be auto-downloaded by train.py if not present"
 
       - name: Train model
         env:
@@ -52,7 +52,7 @@ jobs:
   # ── JOB 2: Deploy ──────────────────────────────────────────────────
   deploy:
     runs-on: ubuntu-latest
-    needs: validate                  # only runs if validate succeeds
+    needs: validate
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
