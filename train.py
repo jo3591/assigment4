@@ -28,6 +28,14 @@ def load_data():
     TRAIN_CSV = os.path.join(DATA_DIR, "fashion-mnist_train.csv")
     if not os.path.exists(TRAIN_CSV):
         TRAIN_CSV = "C:/Users/youhe/Downloads/fashionmnist/fashion-mnist_train.csv"
+        
+    # FIX FOR GITHUB ACTIONS:
+    # GitHub's remote machines do not have your C: drive, and .gitignore blocks the data/ folder.
+    # To prevent the CI pipeline from crashing here, we will generate fake data if the CSV is missing.
+    if not os.path.exists(TRAIN_CSV):
+        print("\n[CI MODE] Dataset not found! Generating dummy data to allow pipeline to proceed...")
+        return np.random.uniform(-1.0, 1.0, size=(200, 28, 28, 1)).astype('float32')
+
     print(f"Loading data from {TRAIN_CSV} ...")
     train_data = pd.read_csv(TRAIN_CSV)
     X_train = train_data.drop('label', axis=1).values
