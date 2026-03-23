@@ -1,0 +1,86 @@
+name: ML Pipeline Part 2
+
+on:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt dvc
+
+      - name: Pull Data
+        run: dvc pull || echo "DVC Pull Skipped"
+
+      - name: Train
+        env:
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+          MOCK_ACCURACY: "0.80" # Temporary override to obtain the Failed screenshot
+        run: |
+          python train.py --epochs 1 --batch_size 100
+
+      - name: Export Run ID
+        run: cat model_info.txt
+
+      - name: Persist model_info.txt
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-info
+          path: model_info.txt
+
+      - name: Persist local mlruns (Fallback)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mlruns-folder
+          path: mlruns/
+
+  deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download model_info.txt
+        uses: actions/download-artifact@v4
+        with:
+          name: model-info
+
+      - name: Download mlruns (Fallback)
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: mlruns-folder
+          path: mlruns/
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install MLflow
+        run: pip install mlflow
+
+      - name: Logic
+        env:
+          MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+        run: python check_threshold.py
+
+      - name: Containerize
+        run: |
+          RUN_ID=$(cat model_info.txt)
+          echo "Building Docker image for Run ID: $RUN_ID"
+          docker build --build-arg RUN_ID=$RUN_ID -t mock-model:$RUN_ID .
