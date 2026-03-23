@@ -7,6 +7,4 @@ data/
 *.so
 *.dylib
 *.pdf
-# I'll let the user upload the PDF separately or push it. Actually wait, they asked to create a PDF and "provide the github link to your public repository". Does the assignment want the PDF in the repo? 
-# "Create a PDF report detailing all bugs in the yaml file and how it is solved. Your report should show... Provide the GitHub link to your public repository. Provide a screenshot..."
-# It's better to include the PDF in the repo.
+#githup link:https://github.com/jo3591/assigment4
