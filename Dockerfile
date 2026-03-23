@@ -1,8 +1,9 @@
 FROM python:3.10-slim
 
+# Accept the MLflow Run ID as a build argument
 ARG RUN_ID
 
-# Include a command to "download" the model
-RUN echo "Downloading model ${RUN_ID}"
+# Simulate downloading the model artifact for this run
+RUN echo "Downloading model for MLflow Run ID: ${RUN_ID}"
 
-CMD ["echo", "Container ready!"]
+CMD ["echo", "Container is ready!"]
