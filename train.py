@@ -229,7 +229,7 @@ def train(args):
         run = mlflow.active_run()
         if run is not None:
             with open("model_info.txt", "w") as f:
-                f.write(run.info.run_id)
+                f.write(f"{run.info.run_id}\n{d_acc}")
             print(f"\nRun ID {run.info.run_id} successfully saved to model_info.txt")
 
     print("\n✓ Training complete. View results at http://localhost:5000")
